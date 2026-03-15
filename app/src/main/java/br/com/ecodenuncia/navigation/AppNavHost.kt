@@ -51,10 +51,11 @@ fun AppNavHost(viewModel: DenunciaViewModel) {
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getLong("id") ?: return@composable
             LocalizacaoScreen(
+                viewModel = viewModel,
                 onVoltar = { navController.popBackStack() },
                 onContinuar = { navController.navigate(AppRoutes.revisao(id)) },
-                onSalvarEndereco = { endereco, bairro, cidade ->
-                    viewModel.atualizarEndereco(id, endereco, bairro, cidade)
+                onSalvarLocalizacao = { endereco, bairro, cidade, observacoes ->
+                    viewModel.atualizarEndereco(id, endereco, bairro, cidade, observacoes)
                 }
             )
         }
