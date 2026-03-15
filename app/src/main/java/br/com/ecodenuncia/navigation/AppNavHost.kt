@@ -3,6 +3,7 @@ package br.com.ecodenuncia.navigation
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
@@ -65,10 +66,12 @@ fun AppNavHost(viewModel: DenunciaViewModel) {
             arguments = listOf(navArgument("id") { type = NavType.LongType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getLong("id") ?: return@composable
-            val denuncia = denuncias.firstOrNull { it.id == id } ?: return@composable
+            val denunciaFlow = remember(id) { viewModel.buscarDenunciaPorId(id) }
+            val denuncia by denunciaFlow.collectAsStateWithLifecycle()
+            val denunciaAtual = denuncia ?: return@composable
 
             RevisaoScreen(
-                denuncia = denuncia,
+                denuncia = denunciaAtual,
                 onVoltar = { navController.popBackStack() },
                 onSalvar = {
                     viewModel.salvarDenunciaPorId(id) {
