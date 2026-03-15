@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -36,6 +39,7 @@ fun LocalizacaoScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -47,7 +51,8 @@ fun LocalizacaoScreen(
 
             Text(
                 text = "Preencha o endereço ou um ponto de referência do local.",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             OutlinedTextField(
@@ -62,7 +67,8 @@ fun LocalizacaoScreen(
                     if (enderecoInvalido) {
                         Text("Informe o endereço ou uma referência do local.")
                     }
-                }
+                },
+                shape = RoundedCornerShape(12.dp)
             )
 
             OutlinedTextField(
@@ -72,7 +78,8 @@ fun LocalizacaoScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("Bairro") },
-                singleLine = true
+                singleLine = true,
+                shape = RoundedCornerShape(12.dp)
             )
 
             OutlinedTextField(
@@ -88,7 +95,8 @@ fun LocalizacaoScreen(
                         Text("Informe a cidade da ocorrência.")
                     }
                 },
-                singleLine = true
+                singleLine = true,
+                shape = RoundedCornerShape(12.dp)
             )
 
             OutlinedTextField(
@@ -98,7 +106,8 @@ fun LocalizacaoScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("Observações") },
-                minLines = 3
+                minLines = 3,
+                shape = RoundedCornerShape(12.dp)
             )
 
             Button(
@@ -113,7 +122,8 @@ fun LocalizacaoScreen(
                         onContinuar()
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Text("Avançar para revisão")
             }

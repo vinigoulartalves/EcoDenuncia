@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -19,9 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import br.com.ecodenuncia.ui.components.EcoDenunciaLogo
 
 @Composable
 fun WelcomeScreen(onContinuar: () -> Unit) {
@@ -36,8 +36,10 @@ fun WelcomeScreen(onContinuar: () -> Unit) {
         ) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+                    containerColor = MaterialTheme.colorScheme.surface
                 )
             ) {
                 Column(
@@ -47,14 +49,10 @@ fun WelcomeScreen(onContinuar: () -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
+                    EcoDenunciaLogo(modifier = Modifier.fillMaxWidth())
+                    Spacer(modifier = Modifier.height(20.dp))
                     Text(
-                        text = "EcoDenúncia",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = "Registre e acompanhe denúncias de descarte irregular de forma rápida e responsável.",
+                        text = "Ajude a preservar sua cidade denunciando descarte irregular com rapidez e responsabilidade.",
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center
@@ -63,9 +61,7 @@ fun WelcomeScreen(onContinuar: () -> Unit) {
                     Button(
                         onClick = onContinuar,
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        )
+                        shape = RoundedCornerShape(14.dp)
                     ) {
                         Text("Começar")
                     }

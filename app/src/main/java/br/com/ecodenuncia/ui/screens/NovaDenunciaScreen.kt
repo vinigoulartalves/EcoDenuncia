@@ -7,10 +7,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -66,6 +72,7 @@ fun NovaDenunciaScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -77,10 +84,11 @@ fun NovaDenunciaScreen(
 
             Text(
                 text = "Preencha os dados iniciais para continuar.",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            androidx.compose.material3.OutlinedTextField(
+            OutlinedTextField(
                 value = formState.titulo,
                 onValueChange = {
                     viewModel.atualizarCampoFormulario(CampoFormularioDenuncia.TITULO, it)
@@ -93,10 +101,11 @@ fun NovaDenunciaScreen(
                         Text("Informe o título da denúncia.")
                     }
                 },
-                singleLine = true
+                singleLine = true,
+                shape = RoundedCornerShape(12.dp)
             )
 
-            androidx.compose.material3.OutlinedTextField(
+            OutlinedTextField(
                 value = formState.descricao,
                 onValueChange = {
                     viewModel.atualizarCampoFormulario(CampoFormularioDenuncia.DESCRICAO, it)
@@ -109,10 +118,11 @@ fun NovaDenunciaScreen(
                         Text("Informe a descrição da denúncia.")
                     }
                 },
-                minLines = 3
+                minLines = 3,
+                shape = RoundedCornerShape(12.dp)
             )
 
-            androidx.compose.material3.OutlinedTextField(
+            OutlinedTextField(
                 value = formState.tipoResiduo,
                 onValueChange = {
                     viewModel.atualizarCampoFormulario(CampoFormularioDenuncia.TIPO_RESIDUO, it)
@@ -125,7 +135,8 @@ fun NovaDenunciaScreen(
                         Text("Informe o tipo de resíduo.")
                     }
                 },
-                singleLine = true
+                singleLine = true,
+                shape = RoundedCornerShape(12.dp)
             )
 
             Button(
@@ -138,7 +149,8 @@ fun NovaDenunciaScreen(
                         mensagemCaptura = "Falha ao preparar arquivo da foto."
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Text("Tirar foto")
             }
@@ -149,12 +161,18 @@ fun NovaDenunciaScreen(
                     style = MaterialTheme.typography.labelLarge
                 )
 
-                ImagePreview(
-                    imageUri = fotoUri,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(220.dp)
-                )
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f))
+                ) {
+                    ImagePreview(
+                        imageUri = fotoUri,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 160.dp, max = 240.dp)
+                    )
+                }
             }
 
             mensagemCaptura?.let {
@@ -175,7 +193,8 @@ fun NovaDenunciaScreen(
                         viewModel.salvarDenuncia(onSalvarRascunho)
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Text("Continuar")
             }
@@ -198,6 +217,7 @@ private fun ImagePreview(
         factory = { context ->
             android.widget.ImageView(context).apply {
                 scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
+                adjustViewBounds = true
                 setBackgroundColor(android.graphics.Color.LTGRAY)
             }
         },
