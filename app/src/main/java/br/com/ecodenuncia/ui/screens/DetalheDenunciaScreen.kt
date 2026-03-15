@@ -13,7 +13,7 @@ import br.com.ecodenuncia.model.Denuncia
 import br.com.ecodenuncia.model.StatusDenuncia
 
 @Composable
-fun DetalhesScreen(
+fun DetalheDenunciaScreen(
     denuncia: Denuncia,
     onVoltar: () -> Unit,
     onEnviar: () -> Unit
