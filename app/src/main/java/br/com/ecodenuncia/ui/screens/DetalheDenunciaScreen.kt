@@ -65,7 +65,6 @@ fun DetalheDenunciaScreen(
                     CampoDetalhe(label = "Endereço", valor = denuncia.endereco)
                     CampoDetalhe(label = "Bairro", valor = denuncia.bairro)
                     CampoDetalhe(label = "Cidade", valor = denuncia.cidade)
-                    CampoDetalhe(label = "Observações", valor = denuncia.observacoes)
                     CampoDetalhe(label = "Foto (URI)", valor = denuncia.fotoUri ?: "Não informada")
                     CampoDetalhe(label = "Data de criação", valor = formatarData(denuncia.dataCriacao))
                 }
