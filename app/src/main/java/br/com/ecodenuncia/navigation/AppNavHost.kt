@@ -103,14 +103,21 @@ fun AppNavHost(viewModel: DenunciaViewModel) {
             arguments = listOf(navArgument("id") { type = NavType.LongType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getLong("id") ?: return@composable
-            val denuncia = denuncias.firstOrNull { it.id == id } ?: return@composable
+            val denuncia by viewModel.buscarDenunciaPorId(id).collectAsStateWithLifecycle()
+            val denunciaAtual = denuncia ?: return@composable
 
             DetalheDenunciaScreen(
-                denuncia = denuncia,
+                denuncia = denunciaAtual,
                 onVoltar = { navController.popBackStack() },
-                onEnviar = {
-                    viewModel.enviarDenuncia(denuncia)
-                    Toast.makeText(context, "Denúncia enviada com sucesso.", Toast.LENGTH_SHORT).show()
+                onSimularEnvio = {
+                    viewModel.simularEnvioDenuncia(id) {
+                        Toast.makeText(context, "Denúncia enviada com sucesso.", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                onExcluir = {
+                    viewModel.excluirDenuncia(id)
+                    Toast.makeText(context, "Denúncia excluída com sucesso.", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()
                 }
             )
         }
