@@ -14,12 +14,15 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import br.com.ecodenuncia.model.Denuncia
 import br.com.ecodenuncia.ui.components.StatusChip
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RevisaoScreen(
     denuncia: Denuncia,
@@ -60,6 +63,20 @@ fun RevisaoScreen(
         Button(onClick = onSalvar, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
             Text("Salvar denúncia")
         }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = "Confira os dados antes de salvar ou simular o envio.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
 
         Button(onClick = onEnviar, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
             Text("Simular envio")
@@ -68,5 +85,20 @@ fun RevisaoScreen(
         OutlinedButton(onClick = onVoltar, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
             Text("Voltar")
         }
+    }
+}
+
+@Composable
+private fun CampoRevisao(label: String, valor: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = valor,
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 }
