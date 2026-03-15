@@ -11,10 +11,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -32,11 +30,38 @@ fun RevisaoScreen(
     onSalvar: () -> Unit,
     onEnviar: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Revisão da denúncia") }
-            )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Revisão da denúncia", style = MaterialTheme.typography.headlineSmall)
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+        ) {
+            Column(
+                modifier = Modifier.padding(14.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Text("Título: ${denuncia.titulo}")
+                Text("Descrição: ${denuncia.descricao}")
+                Text("Tipo de resíduo: ${denuncia.tipoResiduo}")
+                Text("Endereço: ${denuncia.endereco}")
+                Text("Bairro: ${denuncia.bairro}")
+                Text("Cidade: ${denuncia.cidade}")
+                Text("Observações: ${denuncia.observacoes}")
+                Text("Status atual:")
+                StatusChip(status = denuncia.status)
+            }
+        }
+
+        Button(onClick = onSalvar, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
+            Text("Salvar denúncia")
         }
     ) { innerPadding ->
         Column(
@@ -53,59 +78,12 @@ fun RevisaoScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                )
-            ) {
-                Column(
-                    modifier = Modifier.padding(14.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    CampoRevisao(label = "Título", valor = denuncia.titulo)
-                    CampoRevisao(label = "Descrição", valor = denuncia.descricao)
-                    CampoRevisao(label = "Tipo de resíduo", valor = denuncia.tipoResiduo)
-                    CampoRevisao(label = "Endereço", valor = denuncia.endereco)
-                    CampoRevisao(label = "Bairro", valor = denuncia.bairro)
-                    CampoRevisao(label = "Cidade", valor = denuncia.cidade)
-                    CampoRevisao(label = "Observações", valor = denuncia.observacoes)
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(
-                            text = "Status atual",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontWeight = FontWeight.Medium
-                        )
-                        StatusChip(status = denuncia.status)
-                    }
-                }
-            }
+        Button(onClick = onEnviar, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
+            Text("Simular envio")
+        }
 
-            Button(
-                onClick = onSalvar,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Text("Salvar denúncia")
-            }
-
-            Button(
-                onClick = onEnviar,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Text("Simular envio")
-            }
-
-            OutlinedButton(
-                onClick = onVoltar,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Text("Voltar")
-            }
+        OutlinedButton(onClick = onVoltar, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
+            Text("Voltar")
         }
     }
 }
