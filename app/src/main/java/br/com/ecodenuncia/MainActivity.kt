@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import br.com.ecodenuncia.data.local.AppDatabase
 import br.com.ecodenuncia.data.repository.DenunciaRepository
-import br.com.ecodenuncia.navigation.EcoNavGraph
+import br.com.ecodenuncia.navigation.AppNavHost
 import br.com.ecodenuncia.ui.theme.EcoDenunciaTheme
 import br.com.ecodenuncia.viewmodel.DenunciaViewModel
 import br.com.ecodenuncia.viewmodel.DenunciaViewModelFactory
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             EcoDenunciaTheme {
-                EcoNavGraph(viewModel = viewModel)
+                AppNavHost(viewModel = viewModel)
             }
         }
     }
