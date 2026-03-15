@@ -101,6 +101,22 @@ class DenunciaViewModel(
         }
     }
 
+    fun salvarRevisao(id: Long, onSalvo: () -> Unit = {}) {
+        viewModelScope.launch {
+            val denuncia = repository.buscarPorIdUmaVez(id) ?: return@launch
+            repository.atualizar(denuncia.copy(status = StatusDenuncia.PENDENTE))
+            onSalvo()
+        }
+    }
+
+    fun enviarDaRevisao(id: Long, onEnviado: () -> Unit = {}) {
+        viewModelScope.launch {
+            val denuncia = repository.buscarPorIdUmaVez(id) ?: return@launch
+            repository.atualizar(denuncia.copy(status = StatusDenuncia.ENVIADA))
+            onEnviado()
+        }
+    }
+
     fun excluirDenuncia(id: Long) {
         viewModelScope.launch {
             val denuncia = repository.buscarPorIdUmaVez(id) ?: return@launch
