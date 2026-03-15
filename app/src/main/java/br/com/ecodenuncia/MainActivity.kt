@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import br.com.ecodenuncia.data.local.EcoDenunciaDatabase
+import br.com.ecodenuncia.data.local.AppDatabase
 import br.com.ecodenuncia.data.repository.DenunciaRepository
 import br.com.ecodenuncia.navigation.EcoNavGraph
 import br.com.ecodenuncia.ui.theme.EcoDenunciaTheme
@@ -15,7 +15,7 @@ import br.com.ecodenuncia.viewmodel.DenunciaViewModelFactory
 class MainActivity : ComponentActivity() {
 
     private val viewModel: DenunciaViewModel by viewModels {
-        val dao = EcoDenunciaDatabase.getInstance(applicationContext).denunciaDao()
+        val dao = AppDatabase.getInstance(applicationContext).denunciaDao()
         DenunciaViewModelFactory(DenunciaRepository(dao))
     }
 
