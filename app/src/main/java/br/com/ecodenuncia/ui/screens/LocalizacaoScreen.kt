@@ -3,54 +3,124 @@ package br.com.ecodenuncia.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import br.com.ecodenuncia.viewmodel.CampoFormularioDenuncia
+import br.com.ecodenuncia.viewmodel.DenunciaViewModel
 
 @Composable
 fun LocalizacaoScreen(
+    viewModel: DenunciaViewModel,
     onVoltar: () -> Unit,
     onContinuar: () -> Unit,
-    onSalvarEndereco: (String, String, String) -> Unit
+    onSalvarLocalizacao: (String, String, String, String) -> Unit
 ) {
-    var endereco by remember { mutableStateOf("") }
-    var bairro by remember { mutableStateOf("") }
-    var cidade by remember { mutableStateOf("") }
-    var erro by remember { mutableStateOf<String?>(null) }
+    val formState by viewModel.formState.collectAsStateWithLifecycle()
+    val enderecoInvalido = formState.endereco.isBlank()
+    val cidadeInvalida = formState.cidade.isBlank()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text("Localização")
-        OutlinedTextField(value = endereco, onValueChange = { endereco = it }, label = { Text("Endereço") })
-        OutlinedTextField(value = bairro, onValueChange = { bairro = it }, label = { Text("Bairro") })
-        OutlinedTextField(value = cidade, onValueChange = { cidade = it }, label = { Text("Cidade") })
+    Scaffold { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = "Localização",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
 
-        erro?.let { Text(it) }
+            Text(
+                text = "Preencha o endereço ou um ponto de referência do local.",
+                style = MaterialTheme.typography.bodyMedium
+            )
 
-        Button(onClick = {
-            if (endereco.isBlank() || cidade.isBlank()) {
-                erro = "Preencha endereço e cidade."
-            } else {
-                erro = null
-                onSalvarEndereco(endereco, bairro, cidade)
-                onContinuar()
+            OutlinedTextField(
+                value = formState.endereco,
+                onValueChange = {
+                    viewModel.atualizarCampoFormulario(CampoFormularioDenuncia.ENDERECO, it)
+                },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Endereço ou referência") },
+                isError = enderecoInvalido,
+                supportingText = {
+                    if (enderecoInvalido) {
+                        Text("Informe o endereço ou uma referência do local.")
+                    }
+                }
+            )
+
+            OutlinedTextField(
+                value = formState.bairro,
+                onValueChange = {
+                    viewModel.atualizarCampoFormulario(CampoFormularioDenuncia.BAIRRO, it)
+                },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Bairro") },
+                singleLine = true
+            )
+
+            OutlinedTextField(
+                value = formState.cidade,
+                onValueChange = {
+                    viewModel.atualizarCampoFormulario(CampoFormularioDenuncia.CIDADE, it)
+                },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Cidade") },
+                isError = cidadeInvalida,
+                supportingText = {
+                    if (cidadeInvalida) {
+                        Text("Informe a cidade da ocorrência.")
+                    }
+                },
+                singleLine = true
+            )
+
+            OutlinedTextField(
+                value = formState.observacoes,
+                onValueChange = {
+                    viewModel.atualizarCampoFormulario(CampoFormularioDenuncia.OBSERVACOES, it)
+                },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Observações") },
+                minLines = 3
+            )
+
+            Button(
+                onClick = {
+                    if (formState.endereco.isNotBlank() && formState.cidade.isNotBlank()) {
+                        onSalvarLocalizacao(
+                            formState.endereco,
+                            formState.bairro,
+                            formState.cidade,
+                            formState.observacoes
+                        )
+                        onContinuar()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Avançar para revisão")
             }
-        }) {
-            Text("Ir para revisão")
-        }
 
-        Button(onClick = onVoltar) { Text("Voltar") }
+            TextButton(onClick = onVoltar, modifier = Modifier.fillMaxWidth()) {
+                Text("Voltar")
+            }
+        }
     }
 }

@@ -127,7 +127,13 @@ class DenunciaViewModel(
         salvarDenuncia(onSalvo)
     }
 
-    fun atualizarEndereco(id: Long, endereco: String, bairro: String, cidade: String) {
+    fun atualizarEndereco(
+        id: Long,
+        endereco: String,
+        bairro: String,
+        cidade: String,
+        observacoes: String
+    ) {
         viewModelScope.launch {
             val denuncia = repository.buscarPorIdUmaVez(id) ?: return@launch
             repository.atualizar(
@@ -135,6 +141,7 @@ class DenunciaViewModel(
                     endereco = endereco,
                     bairro = bairro,
                     cidade = cidade,
+                    observacoes = observacoes,
                     status = StatusDenuncia.PENDENTE
                 )
             )
