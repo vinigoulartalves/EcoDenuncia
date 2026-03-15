@@ -64,19 +64,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            Text(
-                text = "Resumo",
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                CardResumo(titulo = "Enviadas", valor = "0", modifier = Modifier.weight(1f))
-                CardResumo(titulo = "Pendentes", valor = "0", modifier = Modifier.weight(1f))
-            }
-
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
