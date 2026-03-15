@@ -70,10 +70,17 @@ fun AppNavHost(viewModel: DenunciaViewModel) {
             RevisaoScreen(
                 denuncia = denuncia,
                 onVoltar = { navController.popBackStack() },
+                onSalvar = {
+                    viewModel.salvarRevisao(id) {
+                        Toast.makeText(context, "Denúncia salva com sucesso.", Toast.LENGTH_SHORT).show()
+                        navController.navigate(AppRoutes.LISTA_DENUNCIAS)
+                    }
+                },
                 onEnviar = {
-                    viewModel.enviarDenuncia(denuncia)
-                    Toast.makeText(context, "Denúncia enviada com sucesso.", Toast.LENGTH_SHORT).show()
-                    navController.navigate(AppRoutes.detalheDenuncia(id))
+                    viewModel.enviarDaRevisao(id) {
+                        Toast.makeText(context, "Denúncia enviada com sucesso.", Toast.LENGTH_SHORT).show()
+                        navController.navigate(AppRoutes.LISTA_DENUNCIAS)
+                    }
                 }
             )
         }
