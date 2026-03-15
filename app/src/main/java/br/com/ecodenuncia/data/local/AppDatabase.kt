@@ -9,19 +9,19 @@ import br.com.ecodenuncia.model.Denuncia
 
 @Database(entities = [Denuncia::class], version = 1, exportSchema = false)
 @TypeConverters(StatusConverter::class)
-abstract class EcoDenunciaDatabase : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun denunciaDao(): DenunciaDao
 
     companion object {
         @Volatile
-        private var INSTANCE: EcoDenunciaDatabase? = null
+        private var INSTANCE: AppDatabase? = null
 
-        fun getInstance(context: Context): EcoDenunciaDatabase {
+        fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
-                    EcoDenunciaDatabase::class.java,
+                    AppDatabase::class.java,
                     "eco_denuncia.db"
                 ).build().also { INSTANCE = it }
             }
