@@ -73,13 +73,13 @@ fun AppNavHost(viewModel: DenunciaViewModel) {
                 onSalvar = {
                     viewModel.salvarRevisao(id) {
                         Toast.makeText(context, "Denúncia salva com sucesso.", Toast.LENGTH_SHORT).show()
-                        navController.navigate(AppRoutes.HOME)
+                        navController.navigate(AppRoutes.LISTA_DENUNCIAS)
                     }
                 },
                 onEnviar = {
                     viewModel.enviarDaRevisao(id) {
                         Toast.makeText(context, "Denúncia enviada com sucesso.", Toast.LENGTH_SHORT).show()
-                        navController.navigate(AppRoutes.HOME)
+                        navController.navigate(AppRoutes.LISTA_DENUNCIAS)
                     }
                 }
             )
