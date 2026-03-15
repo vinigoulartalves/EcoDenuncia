@@ -1,16 +1,16 @@
 package br.com.ecodenuncia.navigation
 
-import androidx.compose.runtime.Composable
 import android.widget.Toast
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import br.com.ecodenuncia.ui.screens.DetalhesScreen
+import br.com.ecodenuncia.ui.screens.DetalheDenunciaScreen
 import br.com.ecodenuncia.ui.screens.HomeScreen
 import br.com.ecodenuncia.ui.screens.ListaDenunciasScreen
 import br.com.ecodenuncia.ui.screens.LocalizacaoScreen
@@ -20,39 +20,39 @@ import br.com.ecodenuncia.ui.screens.WelcomeScreen
 import br.com.ecodenuncia.viewmodel.DenunciaViewModel
 
 @Composable
-fun EcoNavGraph(viewModel: DenunciaViewModel) {
+fun AppNavHost(viewModel: DenunciaViewModel) {
     val navController = rememberNavController()
     val denuncias by viewModel.denuncias.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    NavHost(navController = navController, startDestination = AppDestinations.Welcome.route) {
-        composable(AppDestinations.Welcome.route) {
-            WelcomeScreen(onContinuar = { navController.navigate(AppDestinations.Home.route) })
+    NavHost(navController = navController, startDestination = AppRoutes.WELCOME) {
+        composable(AppRoutes.WELCOME) {
+            WelcomeScreen(onContinuar = { navController.navigate(AppRoutes.HOME) })
         }
 
-        composable(AppDestinations.Home.route) {
+        composable(AppRoutes.HOME) {
             HomeScreen(
-                onNovaDenuncia = { navController.navigate(AppDestinations.NovaDenuncia.route) },
-                onListarDenuncias = { navController.navigate(AppDestinations.Lista.route) }
+                onNovaDenuncia = { navController.navigate(AppRoutes.NOVA_DENUNCIA) },
+                onListarDenuncias = { navController.navigate(AppRoutes.LISTA_DENUNCIAS) }
             )
         }
 
-        composable(AppDestinations.NovaDenuncia.route) {
+        composable(AppRoutes.NOVA_DENUNCIA) {
             NovaDenunciaScreen(
                 onVoltar = { navController.popBackStack() },
-                onSalvarRascunho = { id -> navController.navigate(AppDestinations.Localizacao.createRoute(id)) },
+                onSalvarRascunho = { id -> navController.navigate(AppRoutes.localizacao(id)) },
                 viewModel = viewModel
             )
         }
 
         composable(
-            route = AppDestinations.Localizacao.route,
+            route = AppRoutes.LOCALIZACAO,
             arguments = listOf(navArgument("id") { type = NavType.LongType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getLong("id") ?: return@composable
             LocalizacaoScreen(
                 onVoltar = { navController.popBackStack() },
-                onContinuar = { navController.navigate(AppDestinations.Revisao.createRoute(id)) },
+                onContinuar = { navController.navigate(AppRoutes.revisao(id)) },
                 onSalvarEndereco = { endereco, bairro, cidade ->
                     viewModel.atualizarEndereco(id, endereco, bairro, cidade)
                 }
@@ -60,7 +60,7 @@ fun EcoNavGraph(viewModel: DenunciaViewModel) {
         }
 
         composable(
-            route = AppDestinations.Revisao.route,
+            route = AppRoutes.REVISAO,
             arguments = listOf(navArgument("id") { type = NavType.LongType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getLong("id") ?: return@composable
@@ -72,28 +72,28 @@ fun EcoNavGraph(viewModel: DenunciaViewModel) {
                 onEnviar = {
                     viewModel.enviarDenuncia(denuncia)
                     Toast.makeText(context, "Denúncia enviada com sucesso.", Toast.LENGTH_SHORT).show()
-                    navController.navigate(AppDestinations.Detalhes.createRoute(id))
+                    navController.navigate(AppRoutes.detalheDenuncia(id))
                 }
             )
         }
 
-        composable(AppDestinations.Lista.route) {
+        composable(AppRoutes.LISTA_DENUNCIAS) {
             ListaDenunciasScreen(
                 denuncias = denuncias,
                 onVoltar = { navController.popBackStack() },
-                onDetalhes = { id -> navController.navigate(AppDestinations.Detalhes.createRoute(id)) },
+                onDetalhes = { id -> navController.navigate(AppRoutes.detalheDenuncia(id)) },
                 onExcluir = viewModel::excluirDenuncia
             )
         }
 
         composable(
-            route = AppDestinations.Detalhes.route,
+            route = AppRoutes.DETALHE_DENUNCIA,
             arguments = listOf(navArgument("id") { type = NavType.LongType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getLong("id") ?: return@composable
             val denuncia = denuncias.firstOrNull { it.id == id } ?: return@composable
 
-            DetalhesScreen(
+            DetalheDenunciaScreen(
                 denuncia = denuncia,
                 onVoltar = { navController.popBackStack() },
                 onEnviar = {
