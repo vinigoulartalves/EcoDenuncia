@@ -4,33 +4,28 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.viewModels
+import br.com.ecodenuncia.data.local.EcoDenunciaDatabase
+import br.com.ecodenuncia.data.repository.DenunciaRepository
+import br.com.ecodenuncia.navigation.EcoNavGraph
 import br.com.ecodenuncia.ui.theme.EcoDenunciaTheme
+import br.com.ecodenuncia.viewmodel.DenunciaViewModel
+import br.com.ecodenuncia.viewmodel.DenunciaViewModelFactory
 
 class MainActivity : ComponentActivity() {
-    //teste commit inicial
+
+    private val viewModel: DenunciaViewModel by viewModels {
+        val dao = EcoDenunciaDatabase.getInstance(applicationContext).denunciaDao()
+        DenunciaViewModelFactory(DenunciaRepository(dao))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             EcoDenunciaTheme {
-                }
+                EcoNavGraph(viewModel = viewModel)
             }
         }
     }
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
-
